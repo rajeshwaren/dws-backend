@@ -32,7 +32,12 @@ public class AuthService {
         String encodedPassword =passwordEncoder.encode(request.getPassword());
         user.setPassword(encodedPassword);
         userRepository.save(user);
-        emailService.sendWelcomeEmail(user.getEmail(),user.getName());
+        try {
+            emailService.sendWelcomeEmail(user.getEmail(),user.getName());
+        } catch (Exception e) {
+            System.err.println("Email failed for user: " + user.getEmail());
+            e.printStackTrace();
+        }
         return "Registration Successful";
     }
 
